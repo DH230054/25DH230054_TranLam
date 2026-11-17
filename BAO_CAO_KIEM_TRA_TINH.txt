@@ -1,0 +1,16 @@
+{
+  "xml_files_valid": 5,
+  "source_files_included": 75,
+  "missing_source_files": [],
+  "duplicate_project_items": [],
+  "cs_files": 21,
+  "razor_views": 45,
+  "posts_with_antiforgery": 23,
+  "session_abandon_is_absent": true,
+  "sql_computed_total": true,
+  "sql_stock_column": true,
+  "project_type_guids_normalized": true,
+  "no_edmx_designer": true
+}
+
+LƯU Ý: Đây là kiểm tra tĩnh (XML + cấu trúc mã nguồn), không phải kết quả biên dịch Visual Studio hoặc test chạy SQL.

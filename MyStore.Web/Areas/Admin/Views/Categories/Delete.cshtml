@@ -1,0 +1,4 @@
+﻿@model MyStore.Web.Models.Category
+@{ViewBag.Title="Xóa danh mục";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>Xác nhận xóa danh mục</h1></div><div class="admin-box narrow"><p>Bạn chắc chắn muốn xóa <strong>@Model.CategoryName</strong>?</p>
+@using(Html.BeginForm()){ @Html.AntiForgeryToken()<button class="button danger-bg">Xóa danh mục</button><a class="button" href="@Url.Action("Index")">Hủy</a>}</div>

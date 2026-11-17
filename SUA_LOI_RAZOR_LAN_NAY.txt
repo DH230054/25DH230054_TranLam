@@ -1,0 +1,25 @@
+SỬA LỖI RAZOR "Unexpected if keyword after @" (17/11/2026)
+
+1) Đã sửa Views/Shared/_PersonalMenuPV.cshtml:
+   - Chuyển menu thành ba nhánh đăng nhập / quản trị / khách hàng.
+   - Không còn @if lồng trực tiếp vào khối C# else.
+
+2) Đã sửa Areas/Admin/Views/Orders/Details.cshtml:
+   - Viết lại hai form trạng thái và hủy đơn trong hai khối @if riêng.
+
+3) Đã sửa Views/Order/MyOrder.cshtml:
+   - Sửa nhánh hủy đơn để không viết @using trực tiếp sau dấu { của @if.
+
+4) Các thiết lập LocalDB và hai file SQL từ bản trước vẫn được giữ nguyên.
+   - Máy bạn đã báo: SUCCESS - Database MyStore is ready. Products: 20.
+   - KHÔNG cần chạy lại SQL.
+
+CÁCH DÙNG:
+- Dừng website bằng Shift+F5, đóng Visual Studio.
+- Giải nén ZIP này vào một thư mục MỚI (tránh mở nhầm bản cũ).
+- Mở MyStore_MVC5_Full.sln.
+- Build > Rebuild Solution, sau đó F5.
+- Nếu còn lỗi: bấm View Details, chụp đầy đủ Inner Exception và đường dẫn .cshtml.
+
+Mức kiểm tra: Đã kiểm tra mã Razor được sửa và tính toàn vẹn ZIP.
+Chưa chạy trực tiếp Visual Studio/IIS Express trên Windows.

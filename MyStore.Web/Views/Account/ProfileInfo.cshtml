@@ -1,0 +1,10 @@
+﻿@model MyStore.Web.Models.ProfileVM
+@{ViewBag.Title="Thông tin tài khoản";Layout="~/Views/Shared/_CustomerLayout.cshtml";}
+<div class="page-heading"><h1>Thông tin cá nhân</h1></div><div class="card medium-card">
+@using(Html.BeginForm("UpdateProfile","Account",FormMethod.Post)){@Html.AntiForgeryToken()@Html.ValidationSummary(false,"",new{@class="text-error"})
+@Html.LabelFor(x=>x.CustomerName)@Html.TextBoxFor(x=>x.CustomerName,new{@class="form-control"})@Html.ValidationMessageFor(x=>x.CustomerName)
+@Html.LabelFor(x=>x.CustomerPhone)@Html.TextBoxFor(x=>x.CustomerPhone,new{@class="form-control"})@Html.ValidationMessageFor(x=>x.CustomerPhone)
+@Html.LabelFor(x=>x.CustomerEmail)@Html.TextBoxFor(x=>x.CustomerEmail,new{@class="form-control"})@Html.ValidationMessageFor(x=>x.CustomerEmail)
+@Html.LabelFor(x=>x.CustomerAddress)@Html.TextBoxFor(x=>x.CustomerAddress,new{@class="form-control"})@Html.ValidationMessageFor(x=>x.CustomerAddress)
+<button class="btn btn-primary">Lưu thay đổi</button>}
+<a href="@Url.Action("ChangePassword")">Đổi mật khẩu →</a></div>

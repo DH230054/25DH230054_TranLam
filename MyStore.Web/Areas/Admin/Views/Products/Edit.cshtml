@@ -1,0 +1,6 @@
+﻿@model MyStore.Web.Models.Product
+@{ViewBag.Title="Sửa sản phẩm";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>@ViewBag.Title</h1></div><div class="admin-box narrow">
+@using(Html.BeginForm("Edit","Products",FormMethod.Post,new{enctype="multipart/form-data"})){@Html.AntiForgeryToken()@Html.ValidationSummary(false,"",new{@class="error-summary"})
+@Html.HiddenFor(x=>x.ProductID)@Html.Partial("_PVCreateEditProduct",Model)
+<button class="button primary">Lưu sản phẩm</button><a class="button" href="@Url.Action("Index")">Quay lại</a>}</div>

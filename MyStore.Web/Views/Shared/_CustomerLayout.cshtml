@@ -1,0 +1,20 @@
+﻿@using MyStore.Web.Models
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>@ViewBag.Title - TranLam Shoes</title><link rel="stylesheet" href="@Url.Content("~/Content/site.css")"/></head>
+<body>
+<div class="promo">TRANLAM SHOES · TỰ TIN TRÊN TỪNG BƯỚC CHÂN</div>
+<header class="site-header"><div class="container header-flex">
+<a class="brand" href="@Url.Action("Index","Home",new{area=""})">TRAN<span>LAM</span><small>SHOES • EVERY STEP, YOUR STYLE</small></a>
+<nav class="main-nav"><a href="@Url.Action("Index","Home",new{area=""})">Trang chủ</a>
+@Html.Action("CategoryMenu","Home",new{area=""})
+<a href="@Url.Action("ProductList","Home",new{area=""})">Sản phẩm</a></nav>
+@Html.Partial("_PersonalMenuPV", MyStore.Web.Services.NavigationMenuService.Build(Context))
+</div></header>
+<main class="container main-content">
+@if(TempData["Success"]!=null){<div class="alert success">@TempData["Success"]</div>}
+@if(TempData["Error"]!=null){<div class="alert error">@TempData["Error"]</div>}
+@RenderBody()
+</main>
+<footer class="footer"><div class="container footer-flex"><div><strong>MYSTORE</strong><p>Website bán hàng ASP.NET MVC5 · Entity Framework 6 · SQL Server</p></div><div>© @DateTime.Now.Year · Bài tập Web Backend Development</div></div></footer>
+<script src="@Url.Content("~/Scripts/site.js")"></script>@RenderSection("scripts",required:false)</body></html>

@@ -1,0 +1,8 @@
+﻿@model IEnumerable<MyStore.Web.Models.Customer>
+@{ViewBag.Title="Khách hàng";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><div><p class="overline">CUSTOMERS</p><h1>Khách hàng</h1></div></div><div class="admin-box">
+@using(Html.BeginForm("Index","Customers",FormMethod.Get,new{@class="admin-search"})){<input name="keyword" value="@ViewBag.Keyword" placeholder="Họ tên, username, số điện thoại"/>
+<select name="sortOrder"><option value="asc">Tên A-Z</option><option value="desc" @(ViewBag.SortOrder=="desc"?"selected":"")>Tên Z-A</option></select><button class="button">Tìm kiếm</button>}
+<table class="admin-table"><thead><tr><th>Mã</th><th>Tài khoản</th><th>Họ tên</th><th>Điện thoại</th><th>Email</th><th>Thao tác</th></tr></thead><tbody>
+@foreach(var c in Model){<tr><td>#@c.CustomerID</td><td>@c.Username</td><td><strong>@c.CustomerName</strong></td><td>@c.CustomerPhone</td><td>@c.CustomerEmail</td><td><a href="@Url.Action("Details",new{id=c.CustomerID})">Xem đơn hàng</a></td></tr>}
+</tbody></table>@Html.Partial("_SimplePager",new Tuple<int,int,string,string>((int)ViewBag.Page,(int)ViewBag.Total,(string)ViewBag.Keyword,(string)ViewBag.SortOrder))</div>

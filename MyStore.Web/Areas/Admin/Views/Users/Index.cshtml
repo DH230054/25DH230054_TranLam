@@ -1,0 +1,7 @@
+﻿@model IEnumerable<MyStore.Web.Models.StoreUser>
+@{ViewBag.Title="Tài khoản admin";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>Tài khoản quản trị</h1><a class="button primary" href="@Url.Action("Create")">+ Tạo quản trị viên</a></div><div class="admin-box">
+@using(Html.BeginForm("Index","Users",FormMethod.Get,new{@class="admin-search"})){<input name="keyword" value="@ViewBag.Keyword" placeholder="Tên đăng nhập"/><button class="button">Tìm kiếm</button>}
+<table class="admin-table"><thead><tr><th>Tài khoản</th><th>Vai trò</th><th>Thao tác</th></tr></thead><tbody>
+@foreach(var u in Model){<tr><td>@u.Username</td><td>Admin</td><td><a href="@Url.Action("Edit",new{id=u.Username})">Đổi mật khẩu</a> · <a class="danger" href="@Url.Action("Delete",new{id=u.Username})">Xóa</a></td></tr>}
+</tbody></table>@Html.Partial("_SimplePager",new Tuple<int,int,string,string>((int)ViewBag.Page,(int)ViewBag.Total,(string)ViewBag.Keyword,null))</div>

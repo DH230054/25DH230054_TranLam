@@ -1,0 +1,2 @@
+﻿@model MyStore.Web.Models.ProductSearchVM
+@if(Model.TotalPages>1){<nav class="pages">@for(int i=1;i<=Model.TotalPages;i++){<a class="@(i==Model.Page?"current":"")" href="@Url.Action("Index",new{keyword=Model.Keyword,minPrice=Model.MinPrice,maxPrice=Model.MaxPrice,sortOrder=Model.SortOrder,page=i})">@i</a>}</nav>}

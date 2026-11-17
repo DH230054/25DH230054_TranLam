@@ -1,0 +1,5 @@
+﻿@{ViewBag.Title="Đổi mật khẩu admin";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>Đổi mật khẩu: @ViewBag.Username</h1></div><div class="admin-box narrow">
+@using(Html.BeginForm()){@Html.AntiForgeryToken()@Html.Hidden("id",(string)ViewBag.Username)@Html.ValidationSummary(false,"",new{@class="error-summary"})
+<div class="form-group"><label>Mật khẩu mới (ít nhất 8 ký tự)</label><input type="password" name="newPassword" class="field" required="required" minlength="8"/></div>
+<button class="button primary">Lưu</button><a class="button" href="@Url.Action("Index")">Hủy</a>}</div>

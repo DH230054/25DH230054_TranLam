@@ -1,0 +1,7 @@
+﻿@model MyStore.Web.Models.Category
+@{ViewBag.Title="Thêm danh mục";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>@ViewBag.Title</h1></div><div class="admin-box narrow">
+@using(Html.BeginForm()){@Html.AntiForgeryToken()@Html.ValidationSummary(false,"",new{@class="error-summary"})
+
+@Html.Partial("_PVCreateEditCategory",Model)<button class="button primary">Lưu danh mục</button><a class="button" href="@Url.Action("Index")">Quay lại</a>}
+</div>

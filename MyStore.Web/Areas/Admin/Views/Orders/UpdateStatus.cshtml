@@ -1,0 +1,28 @@
+﻿@model MyStore.Web.Models.StoreOrder
+@using MyStore.Web.Services
+@{ViewBag.Title="Cập nhật trạng thái đơn";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>Cập nhật trạng thái đơn #@Model.OrderID</h1></div>
+<div class="admin-box">
+    <p><b>Khách hàng:</b> @Model.Customer.CustomerName</p>
+    <p>Hiện tại: <strong>@OrderLabels.Status(Model.OrderStatus)</strong> · @OrderLabels.Payment(Model.PaymentStatus)</p>
+    @using(Html.BeginForm("UpdateStatus","Orders",FormMethod.Post,new{@class="admin-order-update-form"}))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("id",Model.OrderID)
+        <label>Trạng thái đơn hàng
+        <select name="orderStatus" required>
+        @foreach(var s in new[]{"Pending","Processing","Shipping","Delivered"})
+        {
+            <option value="@s" @(Model.OrderStatus==s?"selected":"")>@OrderLabels.Status(s)</option>
+        }
+        </select></label>
+        <label>Trạng thái thanh toán
+        <select name="paymentStatus" required>
+            <option value="Pending" @(Model.PaymentStatus=="Pending"?"selected":"")>Chưa thanh toán</option>
+            <option value="Paid" @(Model.PaymentStatus=="Paid"?"selected":"")>Đã thanh toán</option>
+        </select></label>
+        <p class="small muted">Chỉ cập nhật theo trình tự. Đơn đã giao/đã hủy không được sửa. Đánh dấu đã thanh toán là thao tác thủ công của Admin.</p>
+        <button type="submit" class="button primary">Lưu cập nhật</button>
+        <a class="button" href="@Url.Action("DetailedOrder",new{id=Model.OrderID})">Hủy thao tác</a>
+    }
+</div>

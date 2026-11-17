@@ -1,0 +1,6 @@
+﻿@model IEnumerable<MyStore.Web.Models.Category>
+@{ViewBag.Title="Danh mục";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><div><p class="overline">CATALOG</p><h1>Quản lý danh mục</h1></div><a class="button primary" href="@Url.Action("Create")">+ Thêm danh mục</a></div>
+<div class="admin-box">@using(Html.BeginForm("Index","Categories",FormMethod.Get,new{@class="admin-search"})){<input name="keyword" placeholder="Tìm tên danh mục" value="@ViewBag.Keyword"/><button class="button">Tìm kiếm</button>}
+<table class="admin-table"><thead><tr><th>Mã</th><th>Tên danh mục</th><th>Chức năng</th></tr></thead><tbody>
+@foreach(var c in Model){<tr><td>#@c.CategoryID</td><td><strong>@c.CategoryName</strong></td><td><a href="@Url.Action("Details",new{id=c.CategoryID})">Chi tiết</a> · <a href="@Url.Action("Edit",new{id=c.CategoryID})">Sửa</a> · <a class="danger" href="@Url.Action("Delete",new{id=c.CategoryID})">Xóa</a></td></tr>}</tbody></table></div>

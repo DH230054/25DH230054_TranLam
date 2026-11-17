@@ -1,0 +1,16 @@
+﻿<!doctype html><html lang="vi"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>@ViewBag.Title | MyStore Admin</title><link rel="stylesheet" href="@Url.Content("~/Content/admin.css")"/></head>
+<body><div class="admin-app"><aside class="sidebar"><a class="admin-brand" href="@Url.Action("Index","Home",new{area="Admin"})">MY<span>STORE</span><small>ADMINISTRATION</small></a>
+<p class="nav-label">QUẢN TRỊ CỬA HÀNG</p>
+<nav><a href="@Url.Action("Index","Home",new{area="Admin"})">▣ &nbsp; Tổng quan</a>
+<a href="@Url.Action("Index","Categories",new{area="Admin"})">▦ &nbsp; Danh mục</a>
+<a href="@Url.Action("Index","Products",new{area="Admin"})">▤ &nbsp; Sản phẩm</a>
+<a href="@Url.Action("Index","Customers",new{area="Admin"})">♙ &nbsp; Khách hàng</a>
+<a href="@Url.Action("Index","Orders",new{area="Admin"})">▣ &nbsp; Đơn hàng</a>
+<a href="@Url.Action("Index","Users",new{area="Admin"})">♧ &nbsp; Tài khoản Admin</a></nav>
+<div class="sidebar-footer"><a href="@Url.Action("Index","Home",new{area=""})">← Trang bán hàng</a>
+<form method="post" action="@Url.Action("Logout","Account",new{area=""})">@Html.AntiForgeryToken()<button class="sidebar-logout">Đăng xuất</button></form></div></aside>
+<div class="admin-main"><header class="admin-top"><span>HỆ THỐNG QUẢN TRỊ MYSTORE</span><strong>@User.Identity.Name</strong></header>
+<main class="admin-content">@if(TempData["Success"]!=null){<div class="message ok">@TempData["Success"]</div>}
+@if(TempData["Error"]!=null){<div class="message err">@TempData["Error"]</div>}@RenderBody()</main>
+<footer class="admin-footer">© @DateTime.Now.Year · ASP.NET MVC5 / SQL Server</footer></div></div>@RenderSection("scripts",false)</body></html>

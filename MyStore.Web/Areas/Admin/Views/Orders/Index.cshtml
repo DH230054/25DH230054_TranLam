@@ -1,0 +1,62 @@
+﻿@model IEnumerable<MyStore.Web.Models.StoreOrder>
+@using MyStore.Web.Services
+@{ ViewBag.Title="Đơn hàng"; Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+   int current=(int)ViewBag.Page; int total=(int)ViewBag.Total; int pages=(int)Math.Ceiling(total/15.0); }
+<div class="admin-heading"><div><p class="overline">ORDERS</p><h1>Quản lý đơn hàng</h1><p>Tìm kiếm, sắp xếp và phân trang 15 đơn/trang</p></div></div>
+<div class="admin-box">
+    @using(Html.BeginForm("Index","Orders",FormMethod.Get,new{@class="admin-search orders-search"}))
+    {
+        <label>Tên khách hàng<input name="customerName" value="@ViewBag.CustomerName" placeholder="Nhập tên khách hàng" /></label>
+        <label>Trạng thái thanh toán
+        <select name="paymentStatus">
+            <option value="">Tất cả</option>
+            <option value="Pending" @(ViewBag.PaymentStatus=="Pending"?"selected":"")>Chưa thanh toán</option>
+            <option value="Paid" @(ViewBag.PaymentStatus=="Paid"?"selected":"")>Đã thanh toán</option>
+            <option value="RefundPending" @(ViewBag.PaymentStatus=="RefundPending"?"selected":"")>Chờ hoàn tiền</option>
+            <option value="Cancelled" @(ViewBag.PaymentStatus=="Cancelled"?"selected":"")>Đã hủy thanh toán</option>
+        </select></label>
+        <label>Ngày đặt hàng<input type="date" name="orderDate" value="@ViewBag.OrderDate" /></label>
+        <label>Trạng thái đơn
+        <select name="status">
+            <option value="">Tất cả</option>
+            @foreach(var st in new[]{"Pending","Processing","Shipping","Delivered","Cancelled"})
+            {
+                <option value="@st" @(ViewBag.Status==st?"selected":"")>@OrderLabels.Status(st)</option>
+            }
+        </select></label>
+        <label>Sắp xếp
+        <select name="sort">
+            <option value="newest" @(ViewBag.Sort=="newest"?"selected":"")>Mới nhất</option>
+            <option value="oldest" @(ViewBag.Sort=="oldest"?"selected":"")>Cũ nhất</option>
+            <option value="total_desc" @(ViewBag.Sort=="total_desc"?"selected":"")>Giá trị giảm dần</option>
+            <option value="total_asc" @(ViewBag.Sort=="total_asc"?"selected":"")>Giá trị tăng dần</option>
+            <option value="customer" @(ViewBag.Sort=="customer"?"selected":"")>Tên khách hàng</option>
+        </select></label>
+        <button class="button primary" type="submit">Tìm kiếm</button>
+        <a class="button" href="@Url.Action("Index")">Xóa lọc</a>
+    }
+    <h2>DANH SÁCH ĐƠN HÀNG <small>(@total đơn)</small></h2>
+    <div class="orders-table-scroll"><table class="admin-table"><thead>
+        <tr><th>Mã đơn</th><th>Ngày đặt</th><th>Khách hàng</th><th>Tổng giá trị</th><th>Thanh toán</th><th>Hình thức giao</th><th>Trạng thái đơn</th><th>Chi tiết</th></tr></thead><tbody>
+        @foreach(var o in Model)
+        {
+            <tr><td>#@o.OrderID</td><td>@o.OrderDate.ToString("dd/MM/yyyy")</td><td>@o.Customer.CustomerName</td>
+                <td>@o.TotalAmount.ToString("N0")₫</td><td>@OrderLabels.Payment(o.PaymentStatus)</td>
+                <td>@ShippingOptions.Name(o.DeliveryMethod)</td><td><span class="pill">@OrderLabels.Status(o.OrderStatus)</span></td>
+                <td><a href="@Url.Action("DetailedOrder",new{id=o.OrderID})">Chi tiết đơn hàng</a></td></tr>
+        }
+        </tbody></table></div>
+    @if(!Model.Any())
+    {
+        <p class="admin-empty">KHÔNG CÓ đơn hàng phù hợp kết quả tìm kiếm.</p>
+    }
+    @if(pages>1)
+    {
+        <nav class="pages">
+            @for(int i=1;i<=pages;i++)
+            {
+                <a class="@(i==current?"current":"")" href="@Url.Action("Index",new{customerName=ViewBag.CustomerName,paymentStatus=ViewBag.PaymentStatus,orderDate=ViewBag.OrderDate,sort=ViewBag.Sort,status=ViewBag.Status,page=i})">@i</a>
+            }
+        </nav>
+    }
+</div>

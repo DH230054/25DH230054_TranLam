@@ -1,0 +1,33 @@
+﻿@model MyStore.Web.Models.PersonalMenuVM
+<div class="personal-nav">
+    <div class="dropdown">
+        <span class="drop-label">@(Model.IsLoggedIn ? "Xin chào, " + Model.Username : "Tài khoản") ▾</span>
+        <div class="dropdown-content right">
+            @if (!Model.IsLoggedIn)
+            {
+                <a href="@Url.Action("Login", "Account", new { area = "" })">Đăng nhập</a>
+                <a href="@Url.Action("Register", "Account", new { area = "" })">Đăng ký</a>
+            }
+            else if (Model.IsAdmin)
+            {
+                <a href="@Url.Action("Index", "Home", new { area = "Admin" })">Trang quản trị</a>
+                <form method="post" action="@Url.Action("Logout", "Account", new { area = "" })">
+                    @Html.AntiForgeryToken()
+                    <button class="link-button" type="submit">Đăng xuất</button>
+                </form>
+            }
+            else
+            {
+                <a href="@Url.Action("ProfileInfo", "Account", new { area = "" })">Hồ sơ</a>
+                <a href="@Url.Action("MyOrder", "Order", new { area = "" })">Đơn hàng của tôi</a>
+                <form method="post" action="@Url.Action("Logout", "Account", new { area = "" })">
+                    @Html.AntiForgeryToken()
+                    <button class="link-button" type="submit">Đăng xuất</button>
+                </form>
+            }
+        </div>
+    </div>
+    <a class="cart-link" href="@Url.Action("Index", "Cart", new { area = "" })">
+        🛒 Giỏ hàng <span class="cart-number">@Model.CartCount</span>
+    </a>
+</div>

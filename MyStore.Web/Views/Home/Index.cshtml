@@ -1,0 +1,10 @@
+﻿@model MyStore.Web.Models.HomeProductVM
+@{ ViewBag.Title="Trang chủ"; Layout="~/Views/Shared/_CustomerLayout.cshtml"; }
+<section class="hero"><div class="hero-copy"><p class="eyebrow">MÙA MUA SẮM MỚI</p><h1>Chọn điều bạn thích.<br/>Mua thật dễ dàng.</h1><p>Khám phá sản phẩm mới, giá tốt và trải nghiệm mua sắm tiện lợi.</p>
+<a class="btn btn-light" href="@Url.Action("ProductList","Home")">Khám phá sản phẩm →</a></div><div class="hero-graphic">M<span>S</span><small>MY STORE</small></div></section>
+<div class="section-heading"><div><span class="eyebrow">BỘ SƯU TẬP</span><h2>Danh mục nổi bật</h2></div><a href="@Url.Action("ProductList","Home")">Xem tất cả →</a></div>
+<div class="category-grid">@foreach(var c in Model.Categories){<a class="category-tile" href="@Url.Action("ProductList","Home",new{categoryId=c.CategoryID})"><span>✦</span><strong>@c.CategoryName</strong><small>Xem sản phẩm →</small></a>}</div>
+<div class="section-heading"><div><span class="eyebrow">BÁN CHẠY</span><h2>Sản phẩm nổi bật</h2></div></div>
+<div class="product-grid">@foreach(var p in Model.Featured){@Html.Partial("_ProductCard",p)}</div>
+<div class="section-heading"><div><span class="eyebrow">VỪA CẬP NHẬT</span><h2>Sản phẩm mới</h2></div><a href="@Url.Action("ProductList","Home")">Xem tất cả →</a></div>
+<div class="product-grid">@foreach(var p in Model.NewProducts){@Html.Partial("_ProductCard",p)}</div>

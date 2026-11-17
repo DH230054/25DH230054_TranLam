@@ -1,0 +1,94 @@
+﻿@model MyStore.Web.Models.Cart
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="page-heading">
+    <span class="eyebrow">SHOPPING CART</span>
+    <h1>Giỏ hàng của bạn</h1>
+</div>
+
+@if (!Model.Items.Any())
+{
+    <div class="empty-state">
+        <h2>Giỏ hàng đang trống</h2>
+        <p>Khám phá những sản phẩm tuyệt vời của MyStore nhé.</p>
+        <a class="btn btn-primary" href="@Url.Action("ProductList", "Home")">Tiếp tục mua sắm</a>
+    </div>
+}
+else
+{
+    <div class="cart-layout">
+        <div>
+            @foreach (var group in Model.GroupedItems)
+            {
+                <div class="card">
+                    <h3>@group.Key</h3>
+                    @foreach (var i in group)
+                    {
+                        <div class="cart-row">
+                            <form method="post" action="@Url.Action("SelectItem", "Cart")">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="productId" value="@i.ProductID" />
+                                <label class="check-label">
+                                    <input type="checkbox" name="selected" value="true" checked="@(i.Selected ? "checked" : null)" onchange="this.form.submit()" /> Chọn
+                                </label>
+                                <input type="hidden" name="selected" value="false" />
+                            </form>
+                            <div class="cart-thumb">
+                                @if (!string.IsNullOrEmpty(MyStore.Web.Services.ProductImageHelper.Resolve(i.ProductName, i.ProductImage)))
+                                {
+                                    <img src="@Url.Content(MyStore.Web.Services.ProductImageHelper.Resolve(i.ProductName, i.ProductImage))" alt="@i.ProductName" />
+                                }
+                                else
+                                {
+                                    <span>MS</span>
+                                }
+                            </div>
+                            <div class="cart-item-info">
+                                <a class="product-title" href="@Url.Action("ProductDetail", "Home", new { id = i.ProductID })">@i.ProductName</a>
+                                <div class="muted">Đơn giá: @i.UnitPrice.ToString("N0")₫</div>
+                                <strong class="price">@i.TotalPrice.ToString("N0")₫</strong>
+                            </div>
+                            <div class="cart-actions">
+                                <form method="post" action="@Url.Action("UpdateQuantity", "Cart")">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="productId" value="@i.ProductID" />
+                                    <input name="quantity" type="number" min="1" max="1000" value="@i.Quantity" class="form-control qty-small" required="required" />
+                                    <button type="submit" class="btn btn-outline btn-small">Cập nhật</button>
+                                </form>
+                                <form method="post" action="@Url.Action("RemoveItem", "Cart")">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="productId" value="@i.ProductID" />
+                                    <button type="submit" class="text-danger link-button">Xóa</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <aside class="card cart-summary">
+            <h2>Đơn hàng</h2>
+            <p>Số lượng: <strong>@Model.Items.Where(x => x.Selected).Sum(x => x.Quantity)</strong></p>
+            <div class="summary-total">
+                <span>Tạm tính</span><strong>@Model.Total.ToString("N0")₫</strong>
+            </div>
+            <p class="small muted">Chỉ tính sản phẩm đã đánh dấu chọn. Giá được kiểm tra lại khi đặt hàng.</p>
+            <a class="btn btn-primary block @(Model.Total == 0 ? "disabled-link" : "")" href="@Url.Action("Checkout", "Order")">Tiến hành đặt hàng →</a>
+            <a class="btn btn-outline block" href="@Url.Action("ProductList", "Home")">Tiếp tục mua hàng</a>
+            <form method="post" action="@Url.Action("ClearCart", "Cart")">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="link-button text-danger" onclick="return confirm('Xóa toàn bộ giỏ hàng?')">Xóa tất cả</button>
+            </form>
+        </aside>
+    </div>
+}
+
+@* Khối gợi ý là một nhánh độc lập, không đặt @if trong else Razor bên trên. *@
+@if (Model.Items.Any() && Model.SimilarProducts.Any())
+{
+    <div class="section-heading"><h2>Có thể bạn sẽ thích</h2></div>
+    @Html.Partial("_PVSimilarProduct", Model.SimilarProducts)
+}

@@ -1,0 +1,94 @@
+﻿@model MyStore.Web.Models.OrderHistoryVM
+@using MyStore.Web.Services
+@{ ViewBag.Title = "Đơn hàng của tôi"; Layout = "~/Views/Shared/_CustomerLayout.cshtml"; }
+<div class="page-heading"><span class="eyebrow">MY ORDERS</span><h1>Đơn hàng của tôi</h1></div>
+<div class="tabs">
+    <a class="@(string.IsNullOrWhiteSpace(Model.Status)?"active":"")" href="@Url.Action("MyOrder", "Order", new { status="", keyword=Model.Keyword })">Tất cả đơn</a>
+    @foreach(var tab in new[] {new {Code="Pending",Name="Chờ thanh toán"},new {Code="Processing",Name="Đang xử lý"},new {Code="Shipping",Name="Đang vận chuyển"},new {Code="Delivered",Name="Đã giao"},new {Code="Cancelled",Name="Đã hủy"}})
+    {
+        <a class="@(Model.Status==tab.Code?"active":"")" href="@Url.Action("MyOrder", "Order", new { status=tab.Code, keyword=Model.Keyword })">@tab.Name</a>
+    }
+</div>
+@using (Html.BeginForm("MyOrder", "Order", FormMethod.Get, new { @class="search-inline" }))
+{
+    @Html.Hidden("status", Model.Status)
+    <input class="form-control" name="keyword" value="@Model.Keyword" placeholder="Tìm theo mã đơn hàng hoặc tên sản phẩm" />
+    <button type="submit" class="btn btn-dark">Tìm đơn hàng</button>
+}
+@if (Model.TotalFound == 0)
+{
+    <div class="empty-state"><h2>BẠN CHƯA CÓ ĐƠN HÀNG NÀO. HÃY ĐẶT ĐƠN NGAY.</h2>
+    <p>Chưa tìm thấy đơn hàng phù hợp với lựa chọn hiện tại.</p>
+    <a class="btn btn-primary" href="@Url.Action("Index","Home")">Về trang chủ</a></div>
+}
+else
+{
+    foreach(var group in Model.Groups.Where(x=>x.TotalCount>0))
+    {
+        <section class="order-group">
+            <h2 class="order-group-title">@group.Title <small>(@group.TotalCount đơn)</small></h2>
+            @foreach(var order in group.Orders)
+            {
+                <div class="card order-history order-history-wide">
+                    <div class="history-head"><strong>Đơn #@order.OrderID</strong><span class="status">@OrderLabels.Status(order.OrderStatus)</span></div>
+                    <p class="small muted">Ngày đặt: @order.OrderDate.ToString("dd/MM/yyyy") · @ShippingOptions.Name(order.DeliveryMethod) · @OrderLabels.Payment(order.PaymentStatus)</p>
+                    @foreach(var detail in order.OrderDetails)
+                    {
+                        <div class="history-product">
+                            <a href="@Url.Action("ProductDetail","Home", new { id=detail.ProductID })" class="history-thumb">
+                                @if(detail.Product != null && !string.IsNullOrWhiteSpace(ProductImageHelper.Resolve(detail.Product.ProductName,detail.Product.ProductImage)))
+                                {
+                                    <img src="@Url.Content(ProductImageHelper.Resolve(detail.Product.ProductName,detail.Product.ProductImage))" alt="Ảnh sản phẩm" loading="lazy" />
+                                }
+                                else
+                                {
+                                    <span>MY STORE</span>
+                                }
+                            </a>
+                            <div class="history-product-info">
+                                <strong>@(detail.Product==null?"Sản phẩm đã ngừng bán":detail.Product.ProductName)</strong>
+                                <small>Số lượng: @detail.Quantity · @detail.UnitPrice.ToString("N0")₫/sp</small>
+                                <div class="history-product-actions">
+                                    <a class="btn btn-outline btn-small" href="@Url.Action("ProductDetail","Home",new{id=detail.ProductID})">Xem chi tiết sản phẩm</a>
+                                    @if(detail.Product != null && detail.Product.StockQuantity>0)
+                                    {
+                                        using(Html.BeginForm("BuyAgain","Order",FormMethod.Post,new { @class="inline-form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            @Html.Hidden("productId",detail.ProductID)
+                                            <button type="submit" class="btn btn-dark btn-small">Mua lại (1 sản phẩm)</button>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <strong>@((detail.Quantity*detail.UnitPrice).ToString("N0"))₫</strong>
+                        </div>
+                    }
+                    <div class="history-foot">
+                        <div class="small muted">Phí giao hàng: @order.ShippingFee.ToString("N0")₫</div>
+                        <div><strong class="price">Tổng: @order.TotalAmount.ToString("N0")₫</strong>
+                        <a class="btn btn-outline btn-small" href="@Url.Action("OrderSuccess",new{id=order.OrderID})">Chi tiết đơn</a>
+                        @if(order.OrderStatus=="Pending")
+                        {
+                            using(Html.BeginForm("Cancel","Order",FormMethod.Post,new{@class="inline-form"}))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("id",order.OrderID)
+                                <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('Bạn có chắc muốn hủy đơn này?')">Hủy đơn</button>
+                            }
+                        }
+                        </div>
+                    </div>
+                </div>
+            }
+            @if(!group.Expanded && group.TotalCount>2)
+            {
+                <a class="btn btn-outline" href="@Url.Action("MyOrder",new{status=Model.Status,keyword=Model.Keyword,expand=group.Code})">Xem thêm (tối đa 50 đơn) · @group.Title</a>
+            }
+            @if(group.Expanded && group.TotalCount>50)
+            {
+                <p class="small muted">Đang hiển thị tối đa 50 đơn mới nhất ở trạng thái này.</p>
+            }
+        </section>
+    }
+}

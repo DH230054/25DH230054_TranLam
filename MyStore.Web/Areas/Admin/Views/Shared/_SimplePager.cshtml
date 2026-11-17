@@ -1,0 +1,3 @@
+﻿@model System.Tuple<int,int,string,string>
+@{int max=(int)Math.Ceiling(Model.Item2/10.0);}
+@if(max>1){<nav class="pages">@for(int i=1;i<=max;i++){<a class="@(i==Model.Item1?"current":"")" href="@Url.Action("Index",new{keyword=Model.Item3,sortOrder=Model.Item4,status=ViewBag.Status,page=i})">@i</a>}</nav>}

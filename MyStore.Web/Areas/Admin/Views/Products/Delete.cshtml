@@ -1,0 +1,4 @@
+﻿@model MyStore.Web.Models.Product
+@{ViewBag.Title="Xóa sản phẩm";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>Xác nhận xóa sản phẩm</h1></div><div class="admin-box">@Html.Partial("_PVProductInfo",Model)
+@using(Html.BeginForm()){ @Html.AntiForgeryToken()<button class="button danger-bg">Xóa sản phẩm</button><a class="button" href="@Url.Action("Index")">Hủy</a>}</div>

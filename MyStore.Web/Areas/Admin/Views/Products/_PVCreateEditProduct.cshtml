@@ -1,0 +1,8 @@
+﻿@model MyStore.Web.Models.Product
+<div class="form-group">@Html.LabelFor(x=>x.CategoryID)@Html.DropDownListFor(x=>x.CategoryID,(SelectList)ViewBag.CategoryID,"-- Chọn danh mục --",new{@class="field"})@Html.ValidationMessageFor(x=>x.CategoryID)</div>
+<div class="form-group">@Html.LabelFor(x=>x.ProductName)@Html.TextBoxFor(x=>x.ProductName,new{@class="field",maxlength="160"})@Html.ValidationMessageFor(x=>x.ProductName)</div>
+<div class="form-group">@Html.LabelFor(x=>x.ProductDescription)@Html.TextAreaFor(x=>x.ProductDescription,4,0,new{@class="field"})@Html.ValidationMessageFor(x=>x.ProductDescription)</div>
+<div class="form-row"><div class="form-group">@Html.LabelFor(x=>x.ProductPrice)@Html.TextBoxFor(x=>x.ProductPrice,new{@class="field",type="number",min="0",step="1000"})@Html.ValidationMessageFor(x=>x.ProductPrice)</div>
+<div class="form-group">@Html.LabelFor(x=>x.StockQuantity)@Html.TextBoxFor(x=>x.StockQuantity,new{@class="field",type="number",min="0"})@Html.ValidationMessageFor(x=>x.StockQuantity)</div></div>
+<div class="form-group">@Html.LabelFor(x=>x.UploadImg)<input class="field" type="file" name="UploadImg" accept="image/jpeg,image/png,image/webp"/><small>JPG / PNG / WEBP, tối đa 3 MB</small>@Html.ValidationMessageFor(x=>x.UploadImg)</div>
+@if(!string.IsNullOrWhiteSpace(MyStore.Web.Services.ProductImageHelper.Resolve(Model.ProductName, Model.ProductImage))){<img class="preview-image" alt="Ảnh sản phẩm" src="@Url.Content(MyStore.Web.Services.ProductImageHelper.Resolve(Model.ProductName, Model.ProductImage))"/>}

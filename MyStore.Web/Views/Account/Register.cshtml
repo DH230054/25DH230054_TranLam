@@ -1,0 +1,14 @@
+﻿@model MyStore.Web.Models.RegisterVM
+@{ViewBag.Title="Đăng ký";Layout="~/Views/Shared/_CustomerLayout.cshtml";}
+<div class="auth-card card"><span class="eyebrow">CREATE ACCOUNT</span><h1>Tạo tài khoản</h1>
+@using(Html.BeginForm("Register","Account",FormMethod.Post)){
+@Html.AntiForgeryToken()@Html.ValidationSummary(false,"",new{@class="text-error"})
+@Html.LabelFor(x=>x.Username)@Html.TextBoxFor(x=>x.Username,new{@class="form-control",autocomplete="username"})@Html.ValidationMessageFor(x=>x.Username)
+@Html.LabelFor(x=>x.Password)@Html.PasswordFor(x=>x.Password,new{@class="form-control",autocomplete="new-password"})@Html.ValidationMessageFor(x=>x.Password)
+@Html.LabelFor(x=>x.ConfirmPassword)@Html.PasswordFor(x=>x.ConfirmPassword,new{@class="form-control"})@Html.ValidationMessageFor(x=>x.ConfirmPassword)
+@Html.LabelFor(x=>x.CustomerName)@Html.TextBoxFor(x=>x.CustomerName,new{@class="form-control"})@Html.ValidationMessageFor(x=>x.CustomerName)
+@Html.LabelFor(x=>x.CustomerPhone)@Html.TextBoxFor(x=>x.CustomerPhone,new{@class="form-control"})@Html.ValidationMessageFor(x=>x.CustomerPhone)
+@Html.LabelFor(x=>x.CustomerEmail)@Html.TextBoxFor(x=>x.CustomerEmail,new{@class="form-control"})@Html.ValidationMessageFor(x=>x.CustomerEmail)
+@Html.LabelFor(x=>x.CustomerAddress)@Html.TextBoxFor(x=>x.CustomerAddress,new{@class="form-control"})@Html.ValidationMessageFor(x=>x.CustomerAddress)
+<button class="btn btn-primary block">Đăng ký</button>}
+<p class="auth-foot">Đã có tài khoản? <a href="@Url.Action("Login")">Đăng nhập</a></p></div>

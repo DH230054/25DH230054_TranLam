@@ -1,0 +1,2 @@
+﻿@model MyStore.Web.Models.Category
+<div class="form-group">@Html.LabelFor(x=>x.CategoryName)@Html.TextBoxFor(x=>x.CategoryName,new{@class="field",maxlength="120"})@Html.ValidationMessageFor(x=>x.CategoryName)</div>

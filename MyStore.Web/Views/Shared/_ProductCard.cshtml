@@ -1,0 +1,9 @@
+﻿@model MyStore.Web.Models.Product
+<article class="product-card"><a href="@Url.Action("ProductDetail","Home",new{area="",id=Model.ProductID})">
+<div class="product-img">@if(!string.IsNullOrWhiteSpace(MyStore.Web.Services.ProductImageHelper.Resolve(Model.ProductName, Model.ProductImage))){<img src="@Url.Content(MyStore.Web.Services.ProductImageHelper.Resolve(Model.ProductName, Model.ProductImage))" alt="@Model.ProductName" loading="lazy"/>}else{<div class="placeholder-art">MYSTORE<small>PRODUCT</small></div>}</div></a>
+<div class="product-body"><div class="muted small">@(Model.Category==null ? "Sản phẩm" : Model.Category.CategoryName)</div>
+<a class="product-title" href="@Url.Action("ProductDetail","Home",new{area="",id=Model.ProductID})">@Model.ProductName</a>
+<div class="price">@Model.ProductPrice.ToString("N0")₫</div><div class="small muted">Còn @Model.StockQuantity sản phẩm</div>
+@using(Html.BeginForm("AddItem","Cart",new{area=""},FormMethod.Post,new{@class="add-card-form"}))
+{@Html.AntiForgeryToken()@Html.Hidden("productId",Model.ProductID)<button type="submit" class="btn btn-dark btn-small" @(Model.StockQuantity<1?"disabled":"")>+ Thêm vào giỏ</button>}
+</div></article>

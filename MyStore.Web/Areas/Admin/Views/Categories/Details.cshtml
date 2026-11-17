@@ -1,0 +1,4 @@
+﻿@model MyStore.Web.Models.Category
+@{ViewBag.Title="Chi tiết danh mục";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>Danh mục #@Model.CategoryID</h1></div><div class="admin-box narrow"><p>Tên danh mục: <strong>@Model.CategoryName</strong></p>
+<a class="button primary" href="@Url.Action("Edit",new{id=Model.CategoryID})">Chỉnh sửa</a><a class="button" href="@Url.Action("Index")">Quay lại</a></div>

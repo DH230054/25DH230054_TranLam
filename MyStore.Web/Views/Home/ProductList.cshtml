@@ -1,0 +1,19 @@
+﻿@model MyStore.Web.Models.ProductSearchVM
+@{ViewBag.Title="Danh sách sản phẩm";Layout="~/Views/Shared/_CustomerLayout.cshtml";}
+<div class="page-heading"><span class="eyebrow">SHOP ALL</span><h1>Tất cả sản phẩm</h1><p>Tìm kiếm, lọc và sắp xếp để tìm sản phẩm phù hợp.</p></div>
+<div class="filter-layout"><aside class="filter-panel"><h3>Bộ lọc sản phẩm</h3>
+@using(Html.BeginForm("ProductList","Home",FormMethod.Get)){
+<label>Tên / mô tả / danh mục</label>@Html.TextBoxFor(x=>x.Keyword,new{@class="form-control",placeholder="Từ khóa..."})
+<label>Danh mục</label>@Html.DropDownListFor(x=>x.CategoryID,(SelectList)ViewBag.Categories,"Tất cả danh mục",new{@class="form-control"})
+<label>Giá từ (VNĐ)</label>@Html.TextBoxFor(x=>x.MinPrice,new{@class="form-control",type="number",min="0",step="1000"})
+<label>Đến (VNĐ)</label>@Html.TextBoxFor(x=>x.MaxPrice,new{@class="form-control",type="number",min="0",step="1000"})
+<label>Sắp xếp</label><select class="form-control" name="sortOrder"><option value="">Mới nhất</option>
+<option value="name_asc" @(Model.SortOrder=="name_asc"?"selected":"")>Tên A → Z</option><option value="name_desc" @(Model.SortOrder=="name_desc"?"selected":"")>Tên Z → A</option>
+<option value="price_asc" @(Model.SortOrder=="price_asc"?"selected":"")>Giá thấp → cao</option><option value="price_desc" @(Model.SortOrder=="price_desc"?"selected":"")>Giá cao → thấp</option></select>
+<button class="btn btn-primary block">Áp dụng lọc</button><a class="btn btn-outline block" href="@Url.Action("ProductList")">Xóa lọc</a>
+}</aside><section class="filter-results"><div class="results-meta"><strong>@Model.TotalCount sản phẩm</strong><span>Trang @Model.Page / @Math.Max(1,Model.TotalPages)</span></div>
+@Html.ValidationSummary(false,"",new{@class="text-error"})
+@if(!Model.Products.Any()){<p class="empty-state">Không có sản phẩm phù hợp.</p>}
+<div class="product-grid three">@foreach(var p in Model.Products){@Html.Partial("_ProductCard",p)}</div>
+@Html.Partial("_Pager",Model)
+</section></div>

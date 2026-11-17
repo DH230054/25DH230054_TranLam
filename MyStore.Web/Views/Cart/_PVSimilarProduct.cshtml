@@ -1,0 +1,2 @@
+﻿@model IEnumerable<MyStore.Web.Models.Product>
+<div class="product-grid">@foreach(var p in Model){@Html.Partial("_ProductCard",p)}</div>

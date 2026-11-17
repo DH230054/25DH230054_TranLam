@@ -1,0 +1,19 @@
+﻿@using MyStore.Web.Areas.Admin.Controllers
+@{ViewBag.Title="Tổng quan";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><div><p class="overline">DASHBOARD</p><h1>Tổng quan cửa hàng</h1><p>Theo dõi hoạt động kinh doanh</p></div></div>
+<div class="stats-grid"><div class="stat-card"><span>Sản phẩm</span><strong>@ViewBag.Products</strong><small>Đang quản lý</small></div>
+<div class="stat-card"><span>Danh mục</span><strong>@ViewBag.Categories</strong><small>Nhóm hàng</small></div>
+<div class="stat-card"><span>Khách hàng</span><strong>@ViewBag.Customers</strong><small>Đã đăng ký</small></div>
+<div class="stat-card"><span>Đơn hàng</span><strong>@ViewBag.Orders</strong><small>@ViewBag.Pending đơn đang chờ</small></div></div>
+<div class="admin-box"><h2>Thống kê tình trạng đơn hàng</h2>
+    <div class="order-dashboard-summary">
+       <span>Chờ thanh toán: <strong>@ViewBag.Pending</strong></span>
+       <span>Đang xử lý: <strong>@ViewBag.Processing</strong></span>
+       <span>Đang vận chuyển: <strong>@ViewBag.Shipping</strong></span>
+       <span>Đã giao: <strong>@ViewBag.Delivered</strong></span>
+       <span>Đã hủy: <strong>@ViewBag.Cancelled</strong></span>
+    </div>
+    <a class="button primary" href="@Url.Action("Index","Orders")">Quản lý đơn hàng</a>
+</div>
+<div class="admin-box"><h2>Doanh thu đơn chưa hủy</h2><p class="revenue">@(((decimal)ViewBag.Revenue).ToString("N0"))₫</p><p class="muted">Tổng giá trị đơn chưa hủy (không đồng nghĩa doanh thu đã thu).</p>
+<h3>Giá trị đơn hàng theo tháng</h3><div class="bar-chart">@foreach(var point in (IEnumerable<HomeController.ChartPoint>)ViewBag.Months){<div class="bar-row"><span>@point.Label</span><div class="bar" style="width:@(Math.Max(2,Math.Min(100,((double)point.Value/Math.Max(1,(double)(decimal)ViewBag.Revenue))*100)).ToString(System.Globalization.CultureInfo.InvariantCulture))%"></div><b>@point.Value.ToString("N0")₫</b></div>}</div></div>

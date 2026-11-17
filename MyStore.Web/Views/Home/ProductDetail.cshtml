@@ -1,0 +1,13 @@
+﻿@model MyStore.Web.Models.ProductDetailsVM
+@{ViewBag.Title=Model.Product.ProductName;Layout="~/Views/Shared/_CustomerLayout.cshtml";}
+<div class="breadcrumbs"><a href="@Url.Action("Index")">Trang chủ</a> / <a href="@Url.Action("ProductList",new{categoryId=Model.Product.CategoryID})">@Model.Product.Category.CategoryName</a> / @Model.Product.ProductName</div>
+<div class="detail-layout"><div class="detail-image">@if(!string.IsNullOrEmpty(MyStore.Web.Services.ProductImageHelper.Resolve(Model.Product.ProductName, Model.Product.ProductImage))){<img src="@Url.Content(MyStore.Web.Services.ProductImageHelper.Resolve(Model.Product.ProductName, Model.Product.ProductImage))" alt="@Model.Product.ProductName"/>}else{<div class="placeholder-art">MYSTORE<small>PRODUCT</small></div>}</div>
+<div class="detail-body"><span class="eyebrow">@Model.Product.Category.CategoryName</span><h1>@Model.Product.ProductName</h1><p class="price big">@Model.Product.ProductPrice.ToString("N0")₫</p>
+<p class="stock">@(Model.Product.StockQuantity>0?"✓ Còn hàng":"Hết hàng") · Tồn kho: @Model.Product.StockQuantity</p>
+<p class="description">@Model.Product.ProductDescription</p>
+@using(Html.BeginForm("AddItem","Cart",FormMethod.Post)){
+@Html.AntiForgeryToken()@Html.Hidden("productId",Model.Product.ProductID)
+<label>Số lượng</label><input class="form-control qty-field" type="number" name="quantity" min="1" max="@Model.Product.StockQuantity" value="1" required="required"/>
+<button class="btn btn-primary" @(Model.Product.StockQuantity<1?"disabled":"")>🛒 Thêm vào giỏ hàng</button>}
+<div class="service-notes">✓ Đổi trả theo quy định &nbsp;&nbsp; ✓ Giao hàng toàn quốc &nbsp;&nbsp; ✓ Hỗ trợ đặt hàng</div></div></div>
+<div class="section-heading"><h2>Sản phẩm cùng danh mục</h2></div><div class="product-grid">@foreach(var p in Model.RelatedProducts){@Html.Partial("_ProductCard",p)}</div>

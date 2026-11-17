@@ -1,0 +1,4 @@
+﻿@model IEnumerable<MyStore.Web.Models.Category>
+<div class="dropdown"><span class="drop-label">Danh mục ▾</span><div class="dropdown-content">
+@foreach(var category in Model){<a href="@Url.Action("ProductList","Home",new{area="",categoryId=category.CategoryID})">@category.CategoryName</a>}
+</div></div>

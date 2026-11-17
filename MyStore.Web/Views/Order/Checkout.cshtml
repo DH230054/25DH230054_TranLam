@@ -1,0 +1,74 @@
+﻿@model MyStore.Web.Models.CheckoutVM
+@using MyStore.Web.Services
+@{ ViewBag.Title = "Đặt hàng"; Layout = "~/Views/Shared/_CustomerLayout.cshtml"; }
+<div class="page-heading"><span class="eyebrow">CHECKOUT</span><h1>Xác nhận đặt hàng</h1></div>
+@using (Html.BeginForm("Checkout", "Order", FormMethod.Post, new { @class="checkout-layout" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="card">
+        <h2>Thông tin giao hàng</h2>
+        @Html.ValidationSummary(false, "", new { @class="text-error" })
+        <label>Địa chỉ nhận hàng</label>
+        @Html.TextBoxFor(x=>x.ShippingAddress, new { @class="form-control", @readonly="readonly", id="shippingAddress" })
+        <button type="button" class="btn btn-outline btn-small" onclick="toggleAddressEdit()">Chỉnh sửa địa chỉ</button>
+        @Html.ValidationMessageFor(x=>x.ShippingAddress)
+
+        <h2>Chọn phương thức giao hàng</h2>
+        <p class="small muted">Phí dưới đây là mức minh họa cho bài tập. Chọn một trong 3 hình thức:</p>
+        <div class="shipping-choices" id="shippingChoices">
+            <label class="shipping-choice">
+                @Html.RadioButtonFor(x=>x.DeliveryMethod, "Economy", new { @class="shipping-radio", data_fee=ShippingOptions.Fee("Economy",Model.TotalAmount) })
+                <span><strong>Giao hàng tiết kiệm</strong><small>Phí mẫu: @ShippingOptions.Fee("Economy",Model.TotalAmount).ToString("N0")₫</small></span>
+            </label>
+            <label class="shipping-choice">
+                @Html.RadioButtonFor(x=>x.DeliveryMethod, "Standard", new { @class="shipping-radio", data_fee=ShippingOptions.Fee("Standard",Model.TotalAmount) })
+                <span><strong>Giao hàng tiêu chuẩn</strong><small>Phí: @ShippingOptions.Fee("Standard",Model.TotalAmount).ToString("N0")₫ · Miễn phí từ 500.000₫</small></span>
+            </label>
+            <label class="shipping-choice">
+                @Html.RadioButtonFor(x=>x.DeliveryMethod, "Express", new { @class="shipping-radio", data_fee=ShippingOptions.Fee("Express",Model.TotalAmount) })
+                <span><strong>Giao hàng hỏa tốc</strong><small>Phí mẫu: @ShippingOptions.Fee("Express",Model.TotalAmount).ToString("N0")₫</small></span>
+            </label>
+        </div>
+        @Html.ValidationMessageFor(x=>x.DeliveryMethod)
+        <h2>Phương thức thanh toán</h2>
+        <label class="radio-line">@Html.RadioButtonFor(x=>x.PaymentMethod, "COD") Thanh toán khi nhận hàng (COD)</label>
+        <label class="radio-line">@Html.RadioButtonFor(x=>x.PaymentMethod, "PayPal") PayPal (cần cấu hình Sandbox)</label>
+        @Html.ValidationMessageFor(x=>x.PaymentMethod)
+    </div>
+    <aside class="card cart-summary">
+        <h2>Đơn hàng (@Model.Items.Count)</h2>
+        @foreach (var i in Model.Items)
+        {
+            <div class="order-mini"><span>@i.ProductName × @i.Quantity</span><strong>@i.TotalPrice.ToString("N0")₫</strong></div>
+        }
+        <div class="order-mini"><span>Tiền hàng</span><strong>@Model.TotalAmount.ToString("N0")₫</strong></div>
+        <div class="order-mini"><span>Phí vận chuyển</span><strong id="shippingFee">@Model.ShippingFee.ToString("N0")₫</strong></div>
+        <div class="summary-total"><span>Tổng thanh toán</span><strong id="grandTotal">@Model.GrandTotal.ToString("N0")₫</strong></div>
+        <p class="small muted">Tổng tiền cuối cùng được tính lại trên máy chủ khi xác nhận đặt hàng.</p>
+        <button class="btn btn-primary block" type="submit">Đặt hàng ngay →</button>
+    </aside>
+}
+@section scripts {
+<script>
+(function () {
+    var subtotal = @Model.TotalAmount.ToString(System.Globalization.CultureInfo.InvariantCulture);
+    function money(number) { return new Intl.NumberFormat('vi-VN', {maximumFractionDigits: 0}).format(number) + '₫'; }
+    function updateShipping() {
+        var checked = document.querySelector('input[name="DeliveryMethod"]:checked');
+        if (!checked) return;
+        var fee = Number(checked.getAttribute('data_fee') || 0);
+        document.getElementById('shippingFee').textContent = money(fee);
+        document.getElementById('grandTotal').textContent = money(subtotal + fee);
+        var labels = document.querySelectorAll('.shipping-choice');
+        for (var i = 0; i < labels.length; i++) labels[i].classList.toggle('selected', labels[i].querySelector('input').checked);
+    }
+    document.querySelectorAll('input[name="DeliveryMethod"]').forEach(function(el){ el.addEventListener('change', updateShipping); });
+    updateShipping();
+})();
+function toggleAddressEdit() {
+    var el = document.getElementById('shippingAddress');
+    el.readOnly = !el.readOnly;
+    if (!el.readOnly) el.focus();
+}
+</script>
+}

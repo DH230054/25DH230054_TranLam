@@ -1,0 +1,4 @@
+﻿@model MyStore.Web.Models.Product
+@{ViewBag.Title="Chi tiết sản phẩm";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>Chi tiết sản phẩm</h1></div><div class="admin-box">@Html.Partial("_PVProductInfo",Model)
+<a class="button primary" href="@Url.Action("Edit",new{id=Model.ProductID})">Chỉnh sửa</a><a class="button" href="@Url.Action("Index")">Quay lại</a></div>

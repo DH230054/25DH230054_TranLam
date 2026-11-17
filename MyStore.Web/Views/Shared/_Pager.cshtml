@@ -1,0 +1,5 @@
+﻿@model MyStore.Web.Models.ProductSearchVM
+@if(Model.TotalPages>1){<div class="pagination">
+@for(int i=1;i<=Model.TotalPages;i++){
+<a class="@(i==Model.Page?"active":"")" href="@Url.Action(ViewContext.RouteData.Values["action"].ToString(),new{keyword=Model.Keyword,minPrice=Model.MinPrice,maxPrice=Model.MaxPrice,categoryId=Model.CategoryID,sortOrder=Model.SortOrder,page=i})">@i</a>
+}</div>}

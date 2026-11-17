@@ -1,0 +1,15 @@
+﻿@model MyStore.Web.Models.ProductSearchVM
+@{ViewBag.Title="Sản phẩm";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><div><p class="overline">INVENTORY</p><h1>Quản lý sản phẩm</h1></div><a href="@Url.Action("Create")" class="button primary">+ Thêm sản phẩm</a></div>
+<div class="admin-box">
+@using(Html.BeginForm("Index","Products",FormMethod.Get,new{@class="admin-search"})){
+<input name="keyword" value="@Model.Keyword" placeholder="Tên / mô tả / danh mục"/>
+<input name="minPrice" value="@Model.MinPrice" type="number" min="0" placeholder="Giá từ"/>
+<input name="maxPrice" value="@Model.MaxPrice" type="number" min="0" placeholder="Giá đến"/>
+<select name="sortOrder"><option value="">Mới nhất</option><option value="name_asc" @(Model.SortOrder=="name_asc"?"selected":"")>Tên A-Z</option><option value="name_desc" @(Model.SortOrder=="name_desc"?"selected":"")>Tên Z-A</option><option value="price_asc" @(Model.SortOrder=="price_asc"?"selected":"")>Giá tăng</option><option value="price_desc" @(Model.SortOrder=="price_desc"?"selected":"")>Giá giảm</option></select><button class="button">Lọc</button>}
+@Html.ValidationSummary(false,"",new{@class="error-summary"})
+<table class="admin-table"><thead><tr><th>ID</th><th>Ảnh</th><th>Tên sản phẩm</th><th>Danh mục</th><th>Giá bán</th><th>Kho</th><th>Thao tác</th></tr></thead><tbody>
+@foreach(var p in Model.Products){<tr><td>#@p.ProductID</td><td>@if(!string.IsNullOrEmpty(MyStore.Web.Services.ProductImageHelper.Resolve(p.ProductName, p.ProductImage))){<img class="mini-image" src="@Url.Content(MyStore.Web.Services.ProductImageHelper.Resolve(p.ProductName, p.ProductImage))"/>}else{<span>📦</span>}</td>
+<td><strong>@p.ProductName</strong></td><td>@p.Category.CategoryName</td><td>@p.ProductPrice.ToString("N0")₫</td><td>@p.StockQuantity</td>
+<td><a href="@Url.Action("Details",new{id=p.ProductID})">Xem</a> · <a href="@Url.Action("Edit",new{id=p.ProductID})">Sửa</a> · <a class="danger" href="@Url.Action("Delete",new{id=p.ProductID})">Xóa</a></td></tr>}
+</tbody></table><p class="muted">Tổng cộng @Model.TotalCount sản phẩm</p>@Html.Partial("_PagerAdmin",Model)</div>

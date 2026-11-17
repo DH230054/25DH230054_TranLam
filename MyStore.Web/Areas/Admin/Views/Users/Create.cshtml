@@ -1,0 +1,7 @@
+﻿@model MyStore.Web.Models.AdminUserVM
+@{ViewBag.Title="Tạo admin";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>Thêm tài khoản Admin</h1></div><div class="admin-box narrow">
+@using(Html.BeginForm()){@Html.AntiForgeryToken()@Html.ValidationSummary(false,"",new{@class="error-summary"})
+<div class="form-group">@Html.LabelFor(x=>x.Username)@Html.TextBoxFor(x=>x.Username,new{@class="field"})@Html.ValidationMessageFor(x=>x.Username)</div>
+<div class="form-group">@Html.LabelFor(x=>x.Password)@Html.PasswordFor(x=>x.Password,new{@class="field"})@Html.ValidationMessageFor(x=>x.Password)</div>
+<button class="button primary">Tạo tài khoản</button><a class="button" href="@Url.Action("Index")">Hủy</a>}</div>

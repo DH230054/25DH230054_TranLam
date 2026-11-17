@@ -1,0 +1,4 @@
+﻿@model MyStore.Web.Models.Product
+<div class="product-admin-detail"><div>@if(!string.IsNullOrEmpty(MyStore.Web.Services.ProductImageHelper.Resolve(Model.ProductName, Model.ProductImage))){<img class="large-preview" src="@Url.Content(MyStore.Web.Services.ProductImageHelper.Resolve(Model.ProductName, Model.ProductImage))" alt="@Model.ProductName"/>}else{<div class="image-placeholder">📦</div>}</div>
+<div><p><b>Mã sản phẩm:</b> @Model.ProductID</p><p><b>Tên:</b> @Model.ProductName</p><p><b>Danh mục:</b> @Model.Category.CategoryName</p>
+<p><b>Giá:</b> @Model.ProductPrice.ToString("N0")₫</p><p><b>Kho:</b> @Model.StockQuantity</p><p><b>Mô tả:</b> @Model.ProductDescription</p></div></div>

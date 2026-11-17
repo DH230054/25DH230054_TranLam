@@ -1,0 +1,4 @@
+﻿@model MyStore.Web.Models.StoreUser
+@{ViewBag.Title="Xóa admin";Layout="~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";}
+<div class="admin-heading"><h1>Xóa quản trị viên</h1></div><div class="admin-box narrow"><p>Xác nhận xóa tài khoản <strong>@Model.Username</strong>?</p>
+@using(Html.BeginForm()){ @Html.AntiForgeryToken()<button class="button danger-bg">Xóa tài khoản</button><a class="button" href="@Url.Action("Index")">Hủy</a>}</div>
